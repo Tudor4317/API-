@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   @db.Text
+  expiresAt DateTime
+  @@map("session")
+}
+model UserData{
+userId String @id @default(uuid())
+username String  @unique
+email String @unique
+password String
+salt String
+artifacts Storage[]
+@@map("users")
+
+}
+
+model Storage{
+artifactId String @id @default(uuid())
+artifact String?
+user UserData @relation(fields: [userId], references: [userId])
+userId String 
+@@map("storage")
+}
+
+
+enum Role{
+  ADMIN
+  USER
+}
+
+
+
+
+
+
+
