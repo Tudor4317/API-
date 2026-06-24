@@ -1,31 +1,25 @@
 /* Essentials libraries */
 import express from "express"
 import session from "express-session"
-import passport from "passport"
-import "./config/passport.js"
-import "dotenv/config"
+import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 import prisma from "./lib/prisma.js"
-import { PrismaSessionStore } from '@quixo3/prisma-session-store';
+
 
 /* Router objects*/
-import loginRouter from "./Routes/loginRouter.js"
-import signupRouter from "./Routes/signupRouter.js"
-import homeRouter from "./Routes/homeRouter.js"
-import successRouter from "./Routes/successRouter.js"
-import protectedRouter from "./Routes/protectedRouter.js"
-import failedRouter from "./Routes/failedRouter.js"
-import settingsRouter from "./Routes/settingsRouter.js"
-import isAuth from "./Controllers/authMiddleware.js"
-
+import createAccountRouter from "./Routes/createAccount.js"
+import changeEmailRouter from "./Routes/changeEmail.js"
+import changePasswordRouter from "./Routes/changePassword.js"
+import deleteAccountRouter from "./Routes/deleteAccount.js"
+import accountRouter from "./Routes/accountRouter.js"
 
 
 const app = express()
 
 
 /* Essential stuff */
+app.use(express.json())
 app.use(express.urlencoded({extended: true}))
-app.set('views', process.env.VIEWS)
-app.set("view engine", "ejs")
+
 
 /* Express-session configuration..*/
 app.use(session({
@@ -45,31 +39,38 @@ secret: process.env.COOKIE,
 
 /*passport middleware */
 
-app.use(passport.initialize())
-app.use(passport.session())
+/*app.use(passport.initialize())
+app.use(passport.session())*/
 
 
 /* Routes : */
 
-/*app.use((req,res,next) =>{
-console.log(updatePassword("It works !", "8"))
+/* app.use((req,res,next) =>{
+req.body.test = "Hello"
+console.log(req.body)
     next()
-})  */
-app.use("/",homeRouter)
-app.use("/sign-up",signupRouter)
-app.use("/log-in",loginRouter)
-app.use("/protected-route",isAuth,protectedRouter)
-app.use("/login-failure", failedRouter)
-app.use("/login-success", successRouter)
-app.use("/protected-route/settings",settingsRouter)
+}) */
+
+
+
+
+app.use("/users/",createAccountRouter)
+app.use("/users/:userId/password",changePasswordRouter)
+app.use("/users/:userId/account",deleteAccountRouter)
+app.use("/users/:userId/data",accountRouter) 
+app.use("/users/:userId/email",changeEmailRouter)
+
+
+
+
 app.use((err,req,res,next) =>{
     console.error(err)
-    res.status(500).render("error", {message:err})
+    res.status(500).json(err)
 })
 
 
 /*server config */
-
+ 
 const PORT = 3000
 app.listen(PORT ,(error) =>{
     if(error){

@@ -12,6 +12,7 @@ model Session {
   sid       String   @unique
   data      String   @db.Text
   expiresAt DateTime
+
   @@map("session")
 }
 model UserData{
