@@ -21,17 +21,17 @@ username String  @unique
 email String @unique
 password String
 salt String
-artifacts Storage[]
+artifacts Artifacts[]
 @@map("users")
 
 }
 
-model Storage{
+model Artifacts{
 artifactId String @id @default(uuid())
 artifact String?
 user UserData @relation(fields: [userId], references: [userId])
 userId String 
-@@map("storage")
+@@map("artifacts")
 }
 
 

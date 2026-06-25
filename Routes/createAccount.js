@@ -1,8 +1,15 @@
 import {Router} from "express"
+import deleteAccountController from "../Controllers/deleteAccountController.js"
+import changeEmailController from "../Controllers/changeEmailController.js"
+import changePasswordController from "../Controllers/changePasswordController.js";
+
 import { postSignUp } from "../Controllers/createAccountController.js"
-const createAccountRouter = Router({mergeParams: true})
+const AccountRouter = Router({mergeParams: true})
 
 
-createAccountRouter.post("/", postSignUp)
+AccountRouter.post("/", postSignUp)
+AccountRouter.delete("/",deleteAccountController)
 
-export default createAccountRouter
+
+
+export default AccountRouter

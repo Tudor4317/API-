@@ -1,4 +1,4 @@
-import { pushData } from "../lib/methods.js"
+import { createUser } from "../lib/methods.js"
 import { hashPassword } from "../lib/passwordHashing.js"
 import prisma from "../lib/prisma.js"
 
@@ -8,7 +8,7 @@ export async function postSignUp(req,res,next){
     try{      
     const {username,password,email} = req.body
     const {hash,salt} = await hashPassword(password)
-    const id = await pushData(username,email,hash,salt)
+    const id = await createUser(username,email,hash,salt)
     res.send(id["userId"])
     /*prisma.userData.delete({
         data : {

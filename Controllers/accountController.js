@@ -1,10 +1,10 @@
-import { pullData } from "../lib/methods.js"
+import {getUser} from "../lib/methods.js"
 import { deleteAccount } from "../lib/methods.js";
 
 export  async function getAccountController(req,res){
     try{
         const {userId} = req.params
-        const user = pullData(userId)
+        const user = getUser(userId)
         res.send(user)
         console.log(`Account info : ${user} `)
     }

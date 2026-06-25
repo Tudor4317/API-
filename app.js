@@ -4,13 +4,12 @@ import session from "express-session"
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 import prisma from "./lib/prisma.js"
 
-
 /* Router objects*/
 import createAccountRouter from "./Routes/createAccount.js"
 import changeEmailRouter from "./Routes/changeEmail.js"
 import changePasswordRouter from "./Routes/changePassword.js"
-import deleteAccountRouter from "./Routes/deleteAccount.js"
 import accountRouter from "./Routes/accountRouter.js"
+import artifactsRouter from "./Routes/artifactsRouter.js"
 
 
 const app = express()
@@ -56,9 +55,11 @@ console.log(req.body)
 
 app.use("/users/",createAccountRouter)
 app.use("/users/:userId/password",changePasswordRouter)
-app.use("/users/:userId/account",deleteAccountRouter)
+/*app.use("/users/:userId/account",deleteAccountRouter)*/
 app.use("/users/:userId/data",accountRouter) 
 app.use("/users/:userId/email",changeEmailRouter)
+app.use("/users/:userId/artifacts", artifactsRouter)
+
 
 
 
