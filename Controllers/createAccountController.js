@@ -4,7 +4,7 @@ import prisma from "../lib/prisma.js"
 
 
 
-export async function postSignUp(req,res,next){
+export async function createAccountController(req,res,next){
     try{      
     const {username,password,email} = req.body
     const {hash,salt} = await hashPassword(password)

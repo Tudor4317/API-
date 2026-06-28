@@ -1,6 +1,7 @@
 import { deleteAccount } from "../lib/methods.js";
 
-export  default async function deleteAccountController(req,res){
+
+export  async function deleteAccountController(req,res){
     try{
        const {userId} = req.params
        const user = await deleteAccount(userId)
@@ -10,5 +11,6 @@ export  default async function deleteAccountController(req,res){
 
     catch(err){
         console.error(err)
-    }
-}
+         res.status(401).json(`Something went wrong ! Here is the error : ${err}`)
+}}
+    

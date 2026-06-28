@@ -10,6 +10,6 @@ export async function pushArtifactsController(req,res){
     }
     catch(err){
         console.error(err)
-        res.status(401).json(err)
-    }
-}
+          res.status(401).json(`Something went wrong ! Here is the error : ${err}`)
+}}
+    
