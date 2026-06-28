@@ -1,0 +1,19 @@
+version:'3'
+services:
+  db:
+    image:db-api:v1
+    port:
+      -5432:5432
+    environment: 
+      -POSTGRES_PASSWORD =  Mewx8vLAmT4Rq5
+      - POSTGRES_USER = main
+      -POSTGRES_DB = api
+  express-api:
+    image:
+    command: npx prisma migrate
+    command : npx prisma generate
+    port:
+        -80:3000
+    environment:
+    - DATABASE_URL="postgres://main:Mewx8vLAmT4Rq5@db:5432/api
+

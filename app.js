@@ -22,7 +22,7 @@ app.use(express.urlencoded({extended: true}))
 
 
 /* Express-session configuration..*/
-app.use(session({
+/*app.use(session({
     store: new PrismaSessionStore(
     prisma,
     {
@@ -35,7 +35,7 @@ secret: process.env.COOKIE,
  resave: false,
  cookie: {maxAge: 30 * 24 * 60 * 60 * 1000}
 
-}))
+}))*/
 
 /*passport middleware */
 
