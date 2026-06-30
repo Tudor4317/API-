@@ -7,14 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model Session {
-  id        String   @id
-  sid       String   @unique
-  data      String   @db.Text
-  expiresAt DateTime
 
-  @@map("session")
-}
 model UserData{
 userId String @id @default(uuid())
 username String  @unique

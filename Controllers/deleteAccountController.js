@@ -3,8 +3,8 @@ import { deleteAccount } from "../lib/methods.js";
 
 export  async function deleteAccountController(req,res){
     try{
-       const {userId} = req.params
-       const user = await deleteAccount(userId)
+       const {username} = req.params
+       const user = await deleteAccount(username)
        res.send(user)
       console.log(`User ${user} was deleted succesfully !`)
     }

@@ -2,8 +2,13 @@ import JwtStrategy from "passport-jwt/lib/strategy";
 import { ExtractJwt } from "passport-jwt";
 import fs from "fs"
 import passport from "passport";
-import prisma from "lib/prisma.js"
-const publicKey = fs.readFileSync("../keys/id_rsa_pub.pem", 'utf-8')
+import prisma from "../lib/prisma.js"
+import { dirname } from "path"
+import { fileURLToPath } from "url"
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const publicKey = fs.readFileSync(__dirname, '.', 'keys', 'id_rsa_pub.pem')
 const option = {
 jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
 secretOrKey: publicKey,

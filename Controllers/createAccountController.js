@@ -1,20 +1,18 @@
 import { createUser } from "../lib/methods.js"
 import { hashPassword } from "../lib/passwordHashing.js"
 import prisma from "../lib/prisma.js"
-
+import issueToken from "../lib/issueToken.js"
 
 
 export async function createAccountController(req,res,next){
     try{      
     const {username,password,email} = req.body
     const {hash,salt} = await hashPassword(password)
-    const id = await createUser(username,email,hash,salt)
-    res.send(id["userId"])
-    /*prisma.userData.delete({
-        data : {
-            userId : id["userId"]
-        }
-    })*/
+    const userObject = await createUser(username,email,hash,salt)
+    const authToken = issueToken(userObject)
+
+    
+    res.json({token : authToken.token, expiresIn : authToken.expires, userId:  userObject.userId})
 
 }
 

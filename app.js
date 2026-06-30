@@ -6,7 +6,7 @@ import prisma from "./lib/prisma.js"
 import jwt from "jsonwebtoken"
 
 /* Router objects*/
-import accountInformationRouter from "./Routes/accountInformationRouter.js"
+import accountManageRouter from "./Routes/accountManageRouter.js"
 import changeEmailRouter from "./Routes/changeEmail.js"
 import changePasswordRouter from "./Routes/changePassword.js"
 import accountCreationRouter from "./Routes/accountCreationRouter.js"
@@ -55,9 +55,9 @@ console.log(req.body)
 
 
 app.use("/users/",accountCreationRouter)
+/* app.use("/users/login",) */
 app.use("/users/:userId/password",changePasswordRouter)
-/*app.use("/users/:userId/account",deleteAccountRouter)*/
-app.use("/users/:userId/data",accountInformationRouter) 
+app.use("/users/:userId/data",accountManageRouter) 
 app.use("/users/:userId/email",changeEmailRouter)
 app.use("/users/:userId/artifacts", artifactsRouter)
 

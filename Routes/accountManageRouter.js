@@ -3,10 +3,10 @@ import {getAccountController} from "../Controllers/getAccountController.js";
 import {deleteAccountController} from "../Controllers/deleteAccountController.js";
 
 
-const accountInformationRouter = Router()
+const accountManageRouter = Router()
 
 
-accountInformationRouter.get("/", getAccountController)
-accountInformationRouter.delete("/",deleteAccountController)
+accountManageRouter.get("/", getAccountController)
+accountManageRouter.delete("/",deleteAccountController)
 
-export default accountInformationRouter
+export default accountManageRouter
