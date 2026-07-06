@@ -14,24 +14,32 @@ username String  @unique
 email String @unique
 password String
 salt String
-artifacts Artifacts[]
+description String?
+artefacts Artefacts[]
+
 @@map("users")
 
 }
 
-model Artifacts{
-artifactId String @id @default(uuid())
-artifact String?
-user UserData @relation(fields: [userId], references: [userId])
-userId String 
-@@map("artifacts")
-}
+ model Artefacts{
+ artefactId String @id @default(uuid())
+ artefact String 
+ user UserData @relation(fields: [userId], references: [userId])
+ userId String
+ isPublic Boolean
+ description String?
+ date String
+ @@map("artefacts")
+ }
 
 
-enum Role{
-  ADMIN
-  USER
-}
+
+
+
+// enum Role{
+//   ADMIN
+//   USER
+// }
 
 
 

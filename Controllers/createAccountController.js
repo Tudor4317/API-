@@ -12,13 +12,20 @@ export async function createAccountController(req,res,next){
     const authToken = issueToken(userObject)
 
     
-    res.json({token : authToken.token, expiresIn : authToken.expires, userId:  userObject.userId})
+    res.cookie("token",authToken,{
+        httpOnly : true,
+        secure : false,
+        sameSite : "lax",
+        maxAge : 14 * 24 * 60 * 60 * 1000
+    } )
+
+    res.json({ message : "Successfully registered"})
 
 }
 
 catch(err){
     console.error(err)
-     res.status(401).json(`Something went wrong ! Here is the error : ${err}`)
+     res.status(500).json(`Something went wrong ! Here is the error : ${err}`)
 }}
 
 

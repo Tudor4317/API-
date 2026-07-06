@@ -1,7 +1,7 @@
 import changeEmailController from "../Controllers/changeEmailController.js"
 import {Router} from "express"
 
-const changeEmailRouter = Router({mergeParams: true})
+const changeEmailRouter = Router()
 
 changeEmailRouter.put("/", changeEmailController)
 

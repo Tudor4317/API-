@@ -5,10 +5,12 @@ import { updatePassword } from "../lib/methods.js"
 export default async function changePasswordController(req,res){
     try{
         const {password} = req.body
-        const {userId} = req.params
+        const {userId} = req.user
         const {hash,salt} = await hashPassword(password)
         const newPassword = await updatePassword(hash,salt,userId)
         /* testing only !!! : res.send(newPassword) */
+
+
     }
        
 

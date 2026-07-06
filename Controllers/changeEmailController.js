@@ -3,7 +3,7 @@ import { updateEmail } from "../lib/methods.js";
 export default async function changeEmailController(req,res){
 try{
     const {email} = req.body
-    const {userId} = req.params
+    const {userId} = req.user
     const newEmail = await updateEmail(email,userId)
     res.send(newEmail)
       console.log(`Email updated succesfully ! New email : ${newEmail}`)

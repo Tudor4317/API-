@@ -4,13 +4,17 @@ import session from "express-session"
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
 import prisma from "./lib/prisma.js"
 import jwt from "jsonwebtoken"
-
+import passport from "passport"
+import "./config/passport.js"
+import cors from "cors"
 /* Router objects*/
 import accountManageRouter from "./Routes/accountManageRouter.js"
 import changeEmailRouter from "./Routes/changeEmail.js"
 import changePasswordRouter from "./Routes/changePassword.js"
 import accountCreationRouter from "./Routes/accountCreationRouter.js"
-import artifactsRouter from "./Routes/artifactsRouter.js"
+import artefactsRouter from "./Routes/artefactsRouter.js"
+import accountLogInRouter from "./Routes/accountLogInRouter.js"
+import generalInfoRouter from "./Routes/generalInfoRouter.js"
 
 
 const app = express()
@@ -19,47 +23,32 @@ const app = express()
 /* Essential stuff */
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(cors())
 
 
-/* Express-session configuration..*/
-/*app.use(session({
-    store: new PrismaSessionStore(
-    prisma,
-    {
-      checkPeriod: 2 * 60 * 1000,
-      dbRecordIdIsSessionId: true,
-      dbRecordIdFunction: undefined,
-    }
-  ),
-secret: process.env.COOKIE,
- resave: false,
- cookie: {maxAge: 30 * 24 * 60 * 60 * 1000}
+// app.use(async (req,res) =>{
+//     try{
+//         const artifacts = await  prisma.artifacts.findMany({
+//             where : {
+//                 userId : "d80a28a2-f59b-4821-a9d2-77bbca312867"
+//             }
+            
+//         })
+//         console.log(artifacts)
+//         return artifacts
+//     }
 
-}))*/
-
-/*passport middleware */
-
-/*app.use(passport.initialize())
-app.use(passport.session())*/
-
-
-/* Routes : */
-
-/* app.use((req,res,next) =>{
-req.body.test = "Hello"
-console.log(req.body)
-    next()
-}) */
-
-
-
-
+//     catch(err) {
+//         return err
+//     }
+// })
 app.use("/users/",accountCreationRouter)
-/* app.use("/users/login",) */
-app.use("/users/:userId/password",changePasswordRouter)
-app.use("/users/:userId/data",accountManageRouter) 
-app.use("/users/:userId/email",changeEmailRouter)
-app.use("/users/:userId/artifacts", artifactsRouter)
+app.use("/users/generalInfo",generalInfoRouter)
+app.use("/users/login",accountLogInRouter)
+app.use("/users/password",passport.authenticate('jwt', {session: false}),changePasswordRouter)
+app.use("/users/data",passport.authenticate('jwt', {session: false}),accountManageRouter) 
+app.use("/users/email",passport.authenticate('jwt', {session: false}),changeEmailRouter)
+app.use("/users/artefacts",passport.authenticate('jwt', {session: false}),artefactsRouter)
 
 
 

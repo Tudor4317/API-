@@ -3,7 +3,7 @@ import {getUser} from "../lib/methods.js"
 
 export  async function getAccountController(req,res){
     try{
-        const {userId} = req.params
+        const {userId} = req.user
         const user = getUser(userId)
         res.send(user)
         console.log(`Account info : ${user} `)

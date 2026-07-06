@@ -1,7 +1,7 @@
 import changePasswordController from "../Controllers/changePasswordController.js"
 import {Router} from "express"
 
-const changePasswordRouter = Router({mergeParams: true})
+const changePasswordRouter = Router()
 
 changePasswordRouter.put("/",changePasswordController)
 

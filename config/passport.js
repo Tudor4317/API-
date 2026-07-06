@@ -1,28 +1,32 @@
-import JwtStrategy from "passport-jwt/lib/strategy";
+import JwtStrategy from "passport-jwt/lib/strategy.js";
 import { ExtractJwt } from "passport-jwt";
 import fs from "fs"
 import passport from "passport";
 import prisma from "../lib/prisma.js"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
+import path from "path";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const publicKey = fs.readFileSync(__dirname, '.', 'keys', 'id_rsa_pub.pem')
-const option = {
+
+
+
+const publicKey = fs.readFileSync(
+    path.join(__dirname, "../keys/id_rsa_pub.pem")
+);
+const options = {
 jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
 secretOrKey: publicKey,
-algorithm : ['RS256']
+algorithms : ['RS256']
 }
 
 
-const strategy = new JwtStrategy(options, verifyCallback)
-
-verifyCallback = async (payload,done) =>{
+const verifyCallback = async (payload,done) =>{
 try{
     const user =await prisma.UserData.findFirst({
         where : {
-            id : payload.sub
+            userId : payload.sub
         },
     })
     if(!user) {
@@ -37,5 +41,11 @@ catch(err) {
 
 }
 
+const strategy = new JwtStrategy(options, verifyCallback)
+
+
 passport.use(strategy)
+
+
+
 
