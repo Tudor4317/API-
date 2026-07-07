@@ -15,6 +15,7 @@ email String @unique
 password String
 salt String
 description String?
+refreshtoken String?
 artefacts Artefacts[]
 
 @@map("users")

@@ -10,16 +10,19 @@ export async function createAccountController(req,res,next){
     const {hash,salt} = await hashPassword(password)
     const userObject = await createUser(username,email,hash,salt)
     const authToken = issueToken(userObject)
-
+    await prisma.userData.update({
+        where :{
+            userId : userObject.userId
+        },
+        data :{
+            refreshtoken : authToken.refreshtoken
+        }
+    })
     
-    res.cookie("token",authToken,{
-        httpOnly : true,
-        secure : false,
-        sameSite : "lax",
-        maxAge : 14 * 24 * 60 * 60 * 1000
-    } )
+    res.cookie("jwt",authToken.refreshToken,{httpOnly: true, maxAge: 15 * 24 * 60 * 60 * 1000})
+    res.json({accessToken : authToken.accessToken})
 
-    res.json({ message : "Successfully registered"})
+
 
 }
 

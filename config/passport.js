@@ -1,51 +1,39 @@
-import JwtStrategy from "passport-jwt/lib/strategy.js";
-import { ExtractJwt } from "passport-jwt";
-import fs from "fs"
+import jwt from "jsonwebtoken"
 import passport from "passport";
 import prisma from "../lib/prisma.js"
 import { dirname } from "path"
 import { fileURLToPath } from "url"
 import path from "path";
+import { verify } from "crypto";
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+import fs from "fs"
 
 
 
 
 const publicKey = fs.readFileSync(
-    path.join(__dirname, "../keys/id_rsa_pub.pem")
+    path.join(__dirname, "../keys/accessTokenKeys/id_rsa_pub.pem")
 );
-const options = {
-jwtFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
-secretOrKey: publicKey,
-algorithms : ['RS256']
+
+
+const verfiyMiddleware = (req,res,next) =>{
+const authHeader = req.headers.authorization
+if(!authHeader){
+    res.status(401).send("Unauthorized")
 }
+const token = authHeader.split(' ')
 
-
-const verifyCallback = async (payload,done) =>{
-try{
-    const user =await prisma.UserData.findFirst({
-        where : {
-            userId : payload.sub
-        },
-    })
-    if(!user) {
-        return done(null,false)
+jwt.verify(token[1],publicKey,  (err,decoded) =>{
+    
+    if(err){
+        return res.status(403).send("Forbidden")
     }
-    return done(null,user)
-}
-
-catch(err) {
-    return done(err,null)
-}
-
-}
-
-const strategy = new JwtStrategy(options, verifyCallback)
+    req.user = {userId : decoded.sub}
+    next()
 
 
-passport.use(strategy)
+})}
 
 
-
-
+export default verfiyMiddleware

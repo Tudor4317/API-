@@ -14,8 +14,8 @@ function genKeyPair(){
         }
     })
 
-    fs.writeFileSync("/home/tudor/API-/keys/id_rsa_pub.pem", keypair.publicKey)
-    fs.writeFileSync("/home/tudor/API-/keys/id_rsa_priv.pem", keypair.privateKey)
+    fs.writeFileSync("/home/ar0ch/API-/keys/id_rsa_pub.pem", keypair.publicKey)
+    fs.writeFileSync("/home/ar0ch/API-/keys/id_rsa_priv.pem", keypair.privateKey)
     
 }
 

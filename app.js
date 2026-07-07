@@ -1,4 +1,4 @@
-/* Essentials libraries */
+/* Essential libraries */
 import express from "express"
 import session from "express-session"
 import { PrismaSessionStore } from '@quixo3/prisma-session-store'
@@ -7,6 +7,9 @@ import jwt from "jsonwebtoken"
 import passport from "passport"
 import "./config/passport.js"
 import cors from "cors"
+import verfiyMiddleware from "./config/passport.js"
+import cookieParser from "cookie-parser"
+
 /* Router objects*/
 import accountManageRouter from "./Routes/accountManageRouter.js"
 import changeEmailRouter from "./Routes/changeEmail.js"
@@ -15,7 +18,7 @@ import accountCreationRouter from "./Routes/accountCreationRouter.js"
 import artefactsRouter from "./Routes/artefactsRouter.js"
 import accountLogInRouter from "./Routes/accountLogInRouter.js"
 import generalInfoRouter from "./Routes/generalInfoRouter.js"
-
+import refreshTokenRouter from "./Routes/refreshTokenRouter.js"
 
 const app = express()
 
@@ -24,6 +27,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
+app.use(cookieParser())
 
 
 // app.use(async (req,res) =>{
@@ -45,11 +49,11 @@ app.use(cors())
 app.use("/users/",accountCreationRouter)
 app.use("/users/generalInfo",generalInfoRouter)
 app.use("/users/login",accountLogInRouter)
-app.use("/users/password",passport.authenticate('jwt', {session: false}),changePasswordRouter)
-app.use("/users/data",passport.authenticate('jwt', {session: false}),accountManageRouter) 
-app.use("/users/email",passport.authenticate('jwt', {session: false}),changeEmailRouter)
-app.use("/users/artefacts",passport.authenticate('jwt', {session: false}),artefactsRouter)
-
+app.use("/users/password",verfiyMiddleware,changePasswordRouter)
+app.use("/users/data",verfiyMiddleware,accountManageRouter) 
+app.use("/users/email",changeEmailRouter)
+app.use("/users/artefacts",verfiyMiddleware,artefactsRouter)
+app.use("/refreshToken", refreshTokenRouter)
 
 
 
