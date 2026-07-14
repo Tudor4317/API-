@@ -7,7 +7,7 @@ export default async function changePasswordController(req,res){
         const {password} = req.body
         const {userId} = req.user
         const {hash,salt} = await hashPassword(password)
-        const newPassword = await updatePassword(hash,salt,userId)
+        const newPassword = await updatePassword(hash,userId)
         /* testing only !!! : res.send(newPassword) */
 
 

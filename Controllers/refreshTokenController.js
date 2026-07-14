@@ -10,18 +10,19 @@ import prisma from "../lib/prisma.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-const refreshTokenkeypath = path.join(__dirname, '..', 'keys', 'accessTokenKeys', 'id_rsa_pub.pem')
-const accessTokenpublicKey = fs.readFileSync(refreshTokenkeypath)
+const refreshTokenpublicKey = fs.readFileSync(path.join(__dirname, '..', 'keys', 'refreshTokenKeys', 'id_rsa_pub.pem'))
 
-export default async function refreshTokenController(res,req){
+export default async function refreshTokenController(req,res){
     
     try{
+const token = req.cookies.jwt
+console.log(token)
 
-
-const refreshToken = req.cookies.jwt
-if(!refreshToken){
-    res.status(401).send("You are not logged in !")
+if(!token){
+    return res.status(401).json({"message" : "You are not logged in !"})
 }
+
+const refreshToken = token.split(" ")[1]
 
 const userVerify = await prisma.userData.findFirst({
     where :{
@@ -32,17 +33,24 @@ const userVerify = await prisma.userData.findFirst({
     }
 })
 
+console.log(userVerify)
+
+
 if(!userVerify){
-    res.status(403).send("User not found !")
+    return res.status(403).json({"message": "not signed up"})
 }
 
-jwt.verify(refreshToken,accessTokenpublicKey,(err,decoded) =>{
-    if(err || decoded.userId !== userVerify.userId ){
-        return res.status(403).send("Unauthorized")
+jwt.verify(refreshToken,refreshTokenpublicKey,{algorithms : ["RS256"]},(err,decoded) =>{
+
+    if(err || decoded.sub !== userVerify.userId ){
+
+    
+        
+        return res.status(403).json({"message" : "No user found !"})
     }
 
 const token = issueToken(userVerify)
-res.json({accessToken : token})
+res.json({accessToken : "Bearer " + token.accessToken})
 
 })
 
@@ -50,6 +58,7 @@ res.json({accessToken : token})
 }
 
 catch(err){
-
+    console.log(err)
+return res.status(403).json(err)
 }
 }

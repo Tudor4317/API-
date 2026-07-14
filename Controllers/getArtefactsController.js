@@ -1,12 +1,13 @@
 import { getArtefact } from "../lib/methods.js"
 export async function getArtefactController(req,res){
     try{
-    const {userId,username} = req.user
-    const artifacts = await getArtefact()
-    res.status(200).json({"username" : username, "userId" : userId, "artifacts" : artifacts  })
+    const {userId} = req.user
+  
+    const artefacts = await getArtefact(userId)
+    res.status(200).json({"username" : username, "userId" : userId, "artefacts" : artefacts  })
 
     }
     catch(err){
-        res.status(500).json(`Something went wrong ! Here is the error : ${err}`)
+        res.status(500).json({message : err})
     }
 }

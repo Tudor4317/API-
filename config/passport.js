@@ -19,15 +19,16 @@ const publicKey = fs.readFileSync(
 
 const verfiyMiddleware = (req,res,next) =>{
 const authHeader = req.headers.authorization
-if(!authHeader){
-    res.status(401).send("Unauthorized")
-}
-const token = authHeader.split(' ')
 
-jwt.verify(token[1],publicKey,  (err,decoded) =>{
+if(!authHeader){
+    res.status(401).send("Not logged in !")
+}
+const token = authHeader.split(' ')[1]
+
+jwt.verify(token,publicKey,  (err,decoded) =>{
     
     if(err){
-        return res.status(403).send("Forbidden")
+        return res.status(403).send(err)
     }
     req.user = {userId : decoded.sub}
     next()

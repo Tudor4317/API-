@@ -8,27 +8,27 @@ export async function createAccountController(req,res,next){
     try{      
     const {username,password,email} = req.body
     const {hash,salt} = await hashPassword(password)
-    const userObject = await createUser(username,email,hash,salt)
-    const authToken = issueToken(userObject)
+    const userObject = await createUser(username,email,hash)
+    const token = issueToken(userObject)
+  
     await prisma.userData.update({
         where :{
-            userId : userObject.userId
+            username : userObject.username
         },
         data :{
-            refreshtoken : authToken.refreshtoken
+            refreshtoken : token["refreshToken"].split(" ")[1]
         }
     })
-    
-    res.cookie("jwt",authToken.refreshToken,{httpOnly: true, maxAge: 15 * 24 * 60 * 60 * 1000})
-    res.json({accessToken : authToken.accessToken})
+        res.cookie("jwt",token.refreshToken,{httpOnly: true, sameSite:'lax', maxAge: 15 * 24 * 60 * 60 * 1000})
+
+    res.json({accessToken : token.accessToken})
 
 
 
 }
 
 catch(err){
-    console.error(err)
-     res.status(500).json(`Something went wrong ! Here is the error : ${err}`)
+     res.status(500).json({message : err})
 }}
 
 

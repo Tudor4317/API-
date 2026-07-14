@@ -1,12 +1,12 @@
 version : '3'
 services:
- # express-api:
-  #  image: express-api:v4
-   # ports: 
-    #  - 3000:3000
-  react:
-    image: react-frontend:v5
-    ports:
-      - 80:5173
+#  express-api:
+#    image: express-api:v8
+#    ports: 
+ #     - 3000:3000
+#  react:
+#    image: react-frontend:v6
+ #   ports:
+  #    - 80:5173
   db:
     image: postgres-db          
