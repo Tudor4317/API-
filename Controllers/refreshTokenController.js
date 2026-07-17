@@ -50,7 +50,7 @@ jwt.verify(refreshToken,refreshTokenpublicKey,{algorithms : ["RS256"]},(err,deco
     }
 
 const token = issueToken(userVerify)
-res.json({accessToken : "Bearer " + token.accessToken})
+res.json({accessToken : token.accessToken})
 
 })
 

@@ -33,12 +33,12 @@ await prisma.userData.update({
 })
 
 res.clearCookie('jwt',{httpOnly: true, sameSite:'lax', maxAge: 15 * 24 * 60 * 60 * 1000})
-res.status(204).json("successfully logged out")
+res.status(204).json({message : "successfully logged out"})
 
 
 }
 catch(err){
-res.status(401).json(err)
+res.status(401).json({message : err})
 }
 
 }
