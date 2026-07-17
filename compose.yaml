@@ -1,12 +1,16 @@
 version : '3'
 services:
-#  express-api:
-#    image: express-api:v8
-#    ports: 
- #     - 3000:3000
-#  react:
-#    image: react-frontend:v6
- #   ports:
-  #    - 80:5173
+
+  express-api:
+    image: tudor43171/express-api:v10
+    container_name: backend
+    ports: 
+      - 3000:3000
+  react:
+    image: tudor43171/react-frontend:v7
+    container_name: frontend
+    ports:
+      - 80:5173
   db:
-    image: postgres-db          
+    image: tudor43171/postgres-db:v2
+    container_name: db
