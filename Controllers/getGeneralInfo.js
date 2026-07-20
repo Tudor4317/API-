@@ -8,6 +8,6 @@ try{
     res.status(200).json({"data" : userData})
 }
 catch(err){
-    res.status(401).json(`Something went wrong ! Here is the error : ${err}`)
+    res.status(401).json({message : "Unexpected error"})
 }
 }
