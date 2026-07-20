@@ -1,12 +1,26 @@
-version : '3'
+
 services:
+
   express-api:
-    image: tudor43171/express-api:v9
+    image:  ghcr.io/tudor4317/backend:latest
+    depends_on:
+      db:
+        condition: service_healthy
     ports: 
       - 3000:3000
+    container_name: backend
+    
   react:
-    image: tudor43171/react-frontend:v7 
+    image: ghcr.io/tudor4317/frontend:latest  
     ports:
       - 80:5173
+    container_name: frontend
+ 
   db:
-    image: tudor43171/postgres-db:v2          
+    image: ghcr.io/tudor4317/db:latest
+    healthcheck:
+     test: ["CMD-SHELL", "pg_isready -U ar0ch -d api"]
+     interval: 5s
+     timeout: 5s
+     retries: 10  
+    container_name: db
