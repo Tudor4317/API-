@@ -1,16 +1,47 @@
-version : '3'
 services:
 
   express-api:
-    image: ghcr.io/tudor4317/db:latest
-    container_name: backend
+    image:  ghcr.io/tudor4317/backend:latest
+    depends_on:
+      db:
+        condition: service_healthy
     ports: 
       - 3000:3000
- # react:
-  #  image: tudor43171/react-frontend:v7
-   # container_name: frontend
-    #ports:
-     # - 80:5173
+    container_name: backend
+    
+#  react:
+ #   image: ghcr.io/tudor4317/frontend:latest  
+  #  ports:
+   #   - 80:5173
+    #container_name: frontend
+ 
+  filestorage:
+    image:  ghcr.io/tudor4317/filestorage:latest
+    command: server --console-address ":9001" /mnt/data
+    volumes:
+      -  minio:/mnt/data
+    ports:
+      - 9001:9001
+      - 9000:9000
+      
+    depends_on:
+      db:
+        condition: service_healthy
+    container_name: files
+
+
   db:
     image: ghcr.io/tudor4317/db:latest
+    volumes:
+       - database:/var/lib/postgresql 
+    healthcheck:
+     test: ["CMD-SHELL", "pg_isready -U ar0ch -d api"]
+     interval: 5s
+     timeout: 5s
+     retries: 10  
     container_name: db
+
+
+volumes:
+  database:
+  minio: 
